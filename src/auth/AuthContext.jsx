@@ -24,6 +24,19 @@ export function AuthProvider({ children }) {
         'Ce compte n’est pas administrateur. La console est réservée à l’équipe Fluxio.'
       );
     }
+    if (data.user.email_verified === false || data.user.status === false) {
+      await authApi.logout().catch(() => {});
+      // Admin créé mais pas encore activé : il doit saisir le code reçu par email.
+      // Sinon le compte a été suspendu, et seul un autre admin peut le réactiver.
+      const unverified = data.user.email_verified === false;
+      const error = new Error(
+        unverified
+          ? 'Saisissez le code d’activation reçu par email.'
+          : 'Ce compte administrateur est suspendu.'
+      );
+      if (unverified) error.code = 'UNVERIFIED';
+      throw error;
+    }
     setUser(data.user);
     return data.user;
   }, []);
