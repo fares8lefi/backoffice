@@ -1,3 +1,7 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://9-205-105-94.sslip.io/api/:path*" },
+    { "source": "/health", "destination": "https://9-205-105-94.sslip.io/health" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
